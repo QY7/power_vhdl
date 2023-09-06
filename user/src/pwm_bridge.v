@@ -2,7 +2,7 @@
 // PWM 互补信号发生模块
 // 作者： Felix Qi
 // 输入：
-// protection：  当protection为1时，pwmA和pwmB输出同时拉低
+// enable：  当enable为0时，pwmA和pwmB输出同时拉低
 // duty:         占空比
 // 输出：
 // pwmA pwmB： 输出PWM信号
@@ -13,7 +13,7 @@ module pwm_bridge(
     output reg pwmA,
     output reg pwmB,
     input clk,rst_n,
-    input protection,
+    input enable,
     input [BIT_WIDTH-1:0]duty
 ); 
 
@@ -47,8 +47,8 @@ begin
 
         begin
             if(counter>duty-deadtime) pwmA<=1'b0;//A
-            else pwmA<=protection?1'b0:1'b1;//A
-            if(counter>=duty+deadtime) pwmB<=protection?1'b0:1'b1;//B
+            else pwmA<=enable?1'b1:1'b0;//A
+            if(counter>=duty+deadtime) pwmB<=enable?1'b1:1'b0;//B
             else pwmB<=1'b0;//B
         end
 
